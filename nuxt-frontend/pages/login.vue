@@ -30,6 +30,21 @@ export default {
                     this.password 
                 )
                 console.log('ログイン成功:',userCredential.user)
+
+                const idToken = await userCredential.user.getIdToken()
+
+                await this.$axios.post('http://localhost:8000/api/auth/register', {
+                idToken: idToken
+                })
+                console.log('Laravel側にもユーザー登録完了')
+
+                const res = await this.$axios.get('http://localhost:8000/api/auth/me', {
+                    headers: {
+                        Authorization: `Bearer ${idToken}`
+                    }
+                })
+                console.log('ログイン中のユーザー:', res.data.user)
+
                 this.$router.push("/")
             } catch (error) {
             alert('ログイン失敗: ' + error.message)

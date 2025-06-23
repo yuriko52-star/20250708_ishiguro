@@ -34,6 +34,15 @@ export default {
                     displayName: this.username
                 })
                 console.log('登録成功:',userCredential.user)
+
+                const idToken = await userCredential.user.getIdToken()
+
+                await this.$axios.post('http://localhost:8000/api/auth/register', {
+                    idToken: idToken
+                })
+                console.log('Laravel登録完了')
+                this.$router.push('/login')
+
             } catch (error) {
                 alert('登録エラー: ' + error.message)
             }

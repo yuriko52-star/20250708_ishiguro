@@ -41,12 +41,13 @@ export default {
 .sidenav {
     color: white;
     padding: 1rem;
-    width: 250px;
+    width: 350px;
     height: 100vh;
     background-color: black;
     display: flex;
     flex-direction: column;
     justify-content: start;
+    border-right: 1px solid white;
     
 }
 
@@ -86,7 +87,7 @@ textarea {
 
 }
 .share-button {
-    width: 50%;
+    width: 40%;
     background-color: blueviolet; 
    color: white;
    padding: 0.5rem 0;
@@ -94,9 +95,6 @@ textarea {
    border-radius: 25px;
    font-weight: bold;
    font-size: 1rem;
-   margin-left: 90px;
-   
-   
-   
+   margin-left: 180px;
 }
 </style>

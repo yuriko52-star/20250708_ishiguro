@@ -1,29 +1,30 @@
 <template>
-    <div class="showMainLayout ? 'layout' : ''">
+    <div :class="showMainLayout ? 'layout' : ''">
         <AuthHeader v-if="showHeader"/>
 
-        <aside v-if="showMainLayout">
-            <SideNav/>
-        </aside>
-        <main>
-            <Message v-if="showMainLayout"/>
+        <!-- <aside v-if="showMainLayout"> -->
+            <!-- <SideNav/> -->
+        <!-- </aside> -->
+        <!-- <main> -->
             <Nuxt/>
-        </main>
+            <!-- <Message v-if="showMainLayout"/> -->
+            
+        <!-- </main> -->
     </div>
     
 </template>
 
 <script>
 import AuthHeader from '~/components/AuthHeader.vue'
-import SideNav from '~/components/SideNav.vue'
-import Message from '~/components/Message.vue'
+// import SideNav from '~/components/SideNav.vue'
+// import Message from '~/components/Message.vue'
 import { onAuthStateChanged } from 'firebase/auth'
 
 export default {
     components: {
         AuthHeader,
-        SideNav,
-        Message
+        // SideNav,
+        // Message
 
     },
     data() {
@@ -35,11 +36,12 @@ export default {
         showHeader() {
             const route = this.$route.path
             return route === '/login' || route === '/register'
-        },
-        showMainLayout() {
+        }
+        /*showMainLayout() {
             const route = this.$route.path
             return route === '/' || route.startsWith('/post/')
         }
+        */
     },
     mounted() {
         onAuthStateChanged(this.$firebaseAuth,(user) => {
@@ -58,11 +60,15 @@ export default {
     .layout {
     display: flex;
     height: 100vh;
+    overflow: hidden;
     }
-   /* main {
-       flex:1;
-       padding: 1.5rem; 
-    }
-    */
+   main {
+flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  height: 100vh;
+  width: 100vw;
+}
 </style>
+
 
