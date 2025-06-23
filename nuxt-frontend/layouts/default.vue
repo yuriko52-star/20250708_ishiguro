@@ -1,5 +1,5 @@
 <template>
-    <div :class="showMainLayout ? 'layout' : ''">
+    <div>
         <AuthHeader v-if="showHeader"/>
 
         <!-- <aside v-if="showMainLayout"> -->

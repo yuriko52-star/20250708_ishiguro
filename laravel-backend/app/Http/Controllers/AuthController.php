@@ -56,7 +56,7 @@ class AuthController extends Controller
     {
         $user = Auth::user();
 
-        if (!user) {
+        if (!$user) {
             return response()->json(['error' => '認証されていません'],401);
         }
         return response()->json(['user' => $user]);

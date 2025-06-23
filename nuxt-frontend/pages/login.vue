@@ -44,9 +44,11 @@ export default {
                     }
                 })
                 console.log('ログイン中のユーザー:', res.data.user)
-
+console.log('ルーター遷移前')
                 this.$router.push("/")
+                console.log('ルーター遷移後') 
             } catch (error) {
+console.error('ログイン処理でエラー:', error)
             alert('ログイン失敗: ' + error.message)
             }
         }
