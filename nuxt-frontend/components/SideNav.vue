@@ -24,9 +24,32 @@ export default {
         }
     },
     methods: {
-        share() {
-           console.log("投稿", this.message)
+        async share() {
+     try {
+        const user = this.$firebaseAuth.currentUser
+        if (!user) {
+        alert('ユーザー情報が取得できません')
+        return
+        }
+            // if(!this.message.trim()) return
+        const idToken = await user.getIdToken()
+            // const idToken = await this.$firebaseAuth.currentUser.getIdToken()
+
+            await this.$axios.post('http://localhost:8000/api/posts', {
+                 username: user.displayName, 
+                body: this.message
+            }, {
+                headers: {
+                    Authorization: `Bearer ${idToken}`
+                }
+            })
+        //    console.log("投稿", this.message)
            this.message =''
+           this.$emit('refreshPosts')
+        } catch (err) {
+            console.error('投稿失敗:', err)
+            alert('投稿失敗しました')
+        }
         },
         logout() {
             this.$firebaseAuth.signOut()
@@ -84,6 +107,7 @@ textarea {
     border-radius: 6px;
     padding: 0.5rem;
     border: 1px solid white;
+    color: white;
 
 }
 .share-button {

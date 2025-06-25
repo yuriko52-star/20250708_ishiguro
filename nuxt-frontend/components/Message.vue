@@ -1,18 +1,55 @@
 <template>
     <div class="message">
         <div class="message-header">
-            <h2 >ユーザー名</h2>
-            <button ><img src="/img/heart.png" alt="" class="img-btn"></button>
-            <p >0</p>
-            <button ><img src="/img/cross.png" alt="" class="img-btn"></button>
-            <nuxt-link to="/posts_id"><img src="/img/detail.png" alt="" class="img-btn">
+            <h2 >{{ post.username}}</h2>
+            <button @click="like"><img src="/img/heart.png" class="img-btn"></button>
+            <p >{{ post.likes_count }}</p>
+            <button @click="remove"><img src="/img/cross.png"  class="img-btn"></button>
+            <nuxt-link v-if="showDetailLink" :to="`/posts/${post.id}`"><img src="/img/detail.png"  class="img-btn">
             </nuxt-link>
         </div>
         <div   class="message-content">
-        メッセージ
+        {{ post.body}}
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    props: {
+        post: {
+            type: Object,
+            required: true
+        },
+            showDetailLink: {
+            type: Boolean,
+            default: true
+        }
+    },
+    methods: {
+        async like() {
+            const idToken = await this.$firebaseAuth.currentUser.getIdToken()
+            await this.$axios.post('http://localhost:8000/api/likes', {
+                post_id: this.post.id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${idToken}`
+                }
+            })
+            this.$emit('liked')
+        },
+        async remove() {
+            const idToken = await this.$firebaseAuth.currentUser.getIdToken()
+            await this.$axios.delete(`http://localhost:8000/api/posts/${this.post.id}`, {
+                headers: {
+                    Authorization: `Bearer ${idToken}`
+                }
+            })
+            this.$emit('deleted')
+        }
+    }
+}
+</script>
 
 <style scoped>
     .message {

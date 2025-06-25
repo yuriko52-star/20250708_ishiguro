@@ -15,11 +15,20 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::withCount('likes')
-         ->with(['comments' => fn($q) => $q->latest()])
+         ->with(['user', 'comments' => fn($q) => $q->latest()])
          ->latest()
          ->get();
 
-         return response()->json($posts);
+         return response()->json(
+            $posts->map(function ($post) {
+                return [
+                    'id' => $post->id,
+                    'username' => $post->user->username,
+                    'body' => $post->body,
+                    'likes_count' => $post->likes_count,
+                    'comments' => $post->comments,
+                ];
+            }));
     }
 
     /**
@@ -30,7 +39,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $request->vaidate([
+        $request->validate([
             'username' => 'required|max:20',
             'body' => 'required|max:120'
         ]);
@@ -79,8 +88,12 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
-        $post->delete();
+        
+        if($post->user_id !== auth()->id()) {
+            return response()->json(['error' =>'Unauthorized'],403);
+        }
 
+        $post->delete();
         return response()->json(['message' => 'Deleted'], 200);
     }
 }
