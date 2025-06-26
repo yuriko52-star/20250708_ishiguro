@@ -6,7 +6,7 @@
       <div v-if="posts.length === 0">投稿がありません</div>
       <Message 
         v-for="post in posts"
-        :key="post.id"
+        :key="post.id + '-' + post.likes_count"
         :post="post"
         @deleted="fetchPosts"
         @liked="fetchPosts"/>

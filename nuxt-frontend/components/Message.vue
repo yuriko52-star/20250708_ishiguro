@@ -1,9 +1,9 @@
 <template>
     <div class="message">
         <div class="message-header">
-            <h2 >{{ post.username}}</h2>
+            <h2 v-if="post.username">{{ post.username}}</h2>
             <button @click="like"><img src="/img/heart.png" class="img-btn"></button>
-            <p >{{ post.likes_count }}</p>
+            <p v-if="post.likes_count !== undefined">{{ post.likes_count }}</p>
             <button @click="remove"><img src="/img/cross.png"  class="img-btn"></button>
             <nuxt-link v-if="showDetailLink" :to="`/posts/${post.id}`"><img src="/img/detail.png"  class="img-btn">
             </nuxt-link>
@@ -28,15 +28,25 @@ export default {
     },
     methods: {
         async like() {
-            const idToken = await this.$firebaseAuth.currentUser.getIdToken()
-            await this.$axios.post('http://localhost:8000/api/likes', {
+            const idToken = await this.$firebaseAuth.currentUser.getIdToken();
+           
+            try {
+            const res = await this.$axios.post('http://localhost:8000/api/likes/toggle', {
                 post_id: this.post.id
             }, {
                 headers: {
                     Authorization: `Bearer ${idToken}`
                 }
-            })
-            this.$emit('liked')
+            });
+            
+            console.log(res.data.message);
+            this.$emit('liked');
+
+            } catch(error) {
+                console.error('いいね処理エラー:', error);
+            
+            }
+            
         },
         async remove() {
             const idToken = await this.$firebaseAuth.currentUser.getIdToken()

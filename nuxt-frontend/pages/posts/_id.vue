@@ -1,25 +1,26 @@
 <template>
     <div class="index-layout">
         
-        <SideNav @refreshPosts="fetchPosts"/>
+        <SideNav @refreshPosts="fetchPost"/>
         <main class="main-content">
             <h2>コメント</h2>
             <Message 
+                v-if="post.username"
                 :post="post" :showDetailLink="false"
-                @deleted="fetchPosts"
-                @liked="fetchPosts"/>
+                @deleted="handleDeleted"
+                @liked="handleLiked"/>
     
-                <div class="comment-content">
+                <div  v-if="post.comments" class="comment-content">
                 <h3>コメント</h3>
                 <div v-for="comment in post.comments" :key="comment.id" class="comment-item">
-                    <p class="username">{{comment.username}}</p>
+                    <p class="username">{{comment.user.username}}</p>
                     <p class="comment-body">{{ comment.comment}}</p>
                 </div>
             </div>
-            <div class="comment-input">
+            <div class="comment-input" v-if="post">
                 <input v-model="newComment" class="input">
             </div>
-            <div class="btn">
+            <div class="btn" vi-if="post">
                 <button @click="submitComment" class="comment-btn">コメント</button>
             </div>
             
@@ -38,26 +39,36 @@ export default {
     },
     data() {
         return {
-            posts:{},
+            post:{},
             newComment: '',
             username: '',
-            
-        }
+          }
     },
     async fetch() {
     await this.fetchPost()
   },
     methods: {
     async fetchPost() {
-      const id = this.$route.params.id
+       const id = this.$route.params.id
       const idToken = localStorage.getItem('idToken')
-      const res = await this.$axios.get(`http://localhost:8000/api/posts/${id}`, {
+      if (!idToken) {
+        console.warn('トークンがありません。ログインしてください。')
+        return
+    }
+    try {
+    const res = await this.$axios.get(`http://localhost:8000/api/posts/${id}`,{
         headers: {
           Authorization: `Bearer ${idToken}`
         }
       })
+      console.log('取得したpost:', res.data)
       this.post = res.data
+      console.log('post:', this.post)
+      } catch (e) {
+        console.error('コメント投稿画面取得でエラー:', e.response?.status, e.response?.data)
+      }
     },
+    
     async submitComment() {
       const idToken = localStorage.getItem('idToken')
       try {
@@ -72,9 +83,15 @@ export default {
         })
         this.newComment = ''
         await this.fetchPost()
-      } catch (e) {
+      } catch  {
         alert('コメント送信エラー')
       }
+    },
+    async handleDeleted() {
+      await this.fetchPost()
+    },
+    async handleLiked() {
+      await this.fetchPost()
     }
   }
 }
@@ -109,8 +126,12 @@ export default {
   margin-top: 1rem;
   padding-top: 1rem;
 }
+h3 {
+  text-align: center;
+}
 .comment-item {
   border-bottom: 1px solid #555;
+  border-top: 1px solid #555;
   padding: 0.5rem 0;
 }
 .username {
@@ -125,7 +146,11 @@ export default {
   padding: 0.5rem;
   border-radius: 8px;
   border: 1px solid #ccc;
-  margin-right: 0.5rem;
+  color: white;
+}
+.btn {
+  text-align: right;
+  margin-top: 1rem;
 }
 .comment-btn {
   background-color: blueviolet;
@@ -133,5 +158,7 @@ export default {
   border: none;
   border-radius: 25px;
   padding: 0.5rem 1rem;
+  font-weight: bold;
+  
 }
 </style>

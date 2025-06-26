@@ -31,6 +31,6 @@ Route::middleware('firebase')->group(function() {
     ]);
     Route::get('/posts/{id}/comments',[CommentController::class, 'show']);
     Route::post('/comments',[CommentController::class, 'store']);
-    Route::post('/likes',[LikeController::class, 'store']);
-    Route::delete('/likes', [LikeController::class,'destroy']);
+    Route::post('/likes/toggle',[LikeController::class, 'toggle']);
+    
 });

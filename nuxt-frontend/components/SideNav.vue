@@ -1,6 +1,6 @@
 <template>
     <aside class="sidenav">
-        <img src="img/logo.png" alt="ロゴ" class="logo">
+        <img src="/img/logo.png" alt="ロゴ" class="logo">
         <nav class="menu">
            <nuxt-link to="/" class="menu-item"><img src="/img/home.png" alt="ホーム" class="">ホーム</nuxt-link>
             <button @click="logout" class="menu-item"><img src="/img/logout.png" alt="ログアウト">ログアウト</button>
@@ -73,7 +73,9 @@ export default {
     border-right: 1px solid white;
     
 }
-
+.logo {
+    width: 50%;
+}
  .menu{ 
     display: flex;
     flex-direction: column;

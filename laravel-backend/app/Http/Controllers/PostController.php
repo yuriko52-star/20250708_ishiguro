@@ -26,8 +26,10 @@ class PostController extends Controller
                     'username' => $post->user->username,
                     'body' => $post->body,
                     'likes_count' => $post->likes_count,
+                    
                     'comments' => $post->comments,
                 ];
+                \Log::info('likes_count:', [$post->likes_count]);
             }));
     }
 
@@ -60,11 +62,24 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::with(['comments' => fn($q) => $q->latest()])
-          ->withCount('likes')
-          ->findOrFail($id);
+        $post = Post::with(['comments' => fn($q) => $q->latest()->with('user')])
+            ->with('user')
+            ->withCount('likes')
+            ->findOrFail($id);
 
-          return response()->json($post);
+          return response()->json([
+            'id' => $post->id,
+            'username' => $post->user->username,
+            'body' => $post->body,
+            'likes_count' => $post->likes_count,
+            'comments' => $post->comments->map(function ($comment) {
+                return [
+                    'id' => $comment->id,
+                    'comment' => $comment->comment,
+                    'username' => $comment->user->username,
+                ];
+            }),
+          ]);
     }
 
     /**

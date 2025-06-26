@@ -36,6 +36,8 @@ export default {
                 await this.$axios.post('http://localhost:8000/api/auth/register', {
                 idToken: idToken
                 })
+                localStorage.setItem('idToken', idToken)
+                this.$router.push('/')
                 console.log('Laravel側にもユーザー登録完了')
 
                 const res = await this.$axios.get('http://localhost:8000/api/auth/me', {
