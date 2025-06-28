@@ -3,8 +3,10 @@
         <div class="message-header">
             <h2 v-if="post.username">{{ post.username}}</h2>
             <button @click="like"><img src="/img/heart.png" class="img-btn"></button>
+            <p v-if="likeError" class="error">{{ likeError }}</p>
             <p v-if="post.likes_count !== undefined">{{ post.likes_count }}</p>
             <button @click="remove"><img src="/img/cross.png"  class="img-btn"></button>
+            <p v-if="deleteError" class="error">{{ deleteError }}</p>
             <nuxt-link v-if="showDetailLink" :to="`/posts/${post.id}`"><img src="/img/detail.png"  class="img-btn">
             </nuxt-link>
         </div>
@@ -26,6 +28,12 @@ export default {
             default: true
         }
     },
+    data() {
+        return {
+            likeError: '',
+            deleteError: ''
+        };
+    },
     methods: {
         async like() {
             const idToken = await this.$firebaseAuth.currentUser.getIdToken();
@@ -42,20 +50,25 @@ export default {
             console.log(res.data.message);
             this.$emit('liked');
 
-            } catch(error) {
-                console.error('いいね処理エラー:', error);
-            
+            } catch(err) {
+                this.likeError = err.response?.data.message || 'いいねできません';
+                console.log(this.likeError)
+                console.error('いいね処理エラー:', err);
             }
             
         },
         async remove() {
             const idToken = await this.$firebaseAuth.currentUser.getIdToken()
+            try {
             await this.$axios.delete(`http://localhost:8000/api/posts/${this.post.id}`, {
                 headers: {
                     Authorization: `Bearer ${idToken}`
                 }
             })
             this.$emit('deleted')
+            } catch(err) {
+                this.deleteError = err.response?.data.message || '削除できません';
+            }
         }
     }
 }
@@ -85,5 +98,10 @@ export default {
     }
     .message-content {
         padding: 20px 10px;
+    }
+    .error {
+        color: red;
+        font-size: 0.9rem;
+        
     }
 </style>

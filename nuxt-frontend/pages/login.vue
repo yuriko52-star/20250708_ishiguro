@@ -1,13 +1,21 @@
 <template>
+<validationObserver v-slot="{ invalid }">
     <div class="login-page">
         <div class="login-box">
             <h2>ログイン</h2>
-            <input v-model="email" type="email" placeholder="メールアドレス">
-            <input v-model="password" type="password" placeholder="パスワード">
-        
-            <button @click="login">ログイン</button>
+            <ValidationProvider name="メールアドレス" rules="required|email" v-slot="{ errors }">
+                 <input v-model="email" type="email" placeholder="メールアドレス">
+                <div class="error">{{ errors[0]}}</div>
+            </ValidationProvider>
+            
+           <ValidationProvider name="パスワード" rules="required|min:6" v-slot="{ errors }">
+                <input v-model="password" type="password" placeholder="パスワード">
+                <div class="error">{{ errors[0] }}</div>
+           </ValidationProvider>
+            <button :disabled="invalid" @click="login">ログイン</button>
         </div>
     </div>
+</validationObserver>
 </template>
 
 <script>
@@ -18,7 +26,8 @@ export default {
         return  {
             
             email: '',
-            password: ''
+            password: '',
+            
         }
     },
     methods: {
@@ -45,13 +54,14 @@ export default {
                         Authorization: `Bearer ${idToken}`
                     }
                 })
+                this.username = res.data.user.username
                 console.log('ログイン中のユーザー:', res.data.user)
-console.log('ルーター遷移前')
+                console.log('ルーター遷移前')
                 this.$router.push("/")
                 console.log('ルーター遷移後') 
-            } catch (error) {
-console.error('ログイン処理でエラー:', error)
-            alert('ログイン失敗: ' + error.message)
+                } catch (error) {
+                console.error('ログイン処理でエラー:', error)
+                alert('ログイン失敗: ' + error.message)
             }
         }
     }
@@ -95,5 +105,8 @@ console.error('ログイン処理でエラー:', error)
    font-weight: bold;
    display: block;
    margin-left: 120px;
+}
+.error {
+    color: red;
 }
 </style>

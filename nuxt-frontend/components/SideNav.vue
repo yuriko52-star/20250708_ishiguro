@@ -1,4 +1,5 @@
 <template>
+<validation-observer ref="observer" v-slot="{ invalid, reset}">
     <aside class="sidenav">
         <img src="/img/logo.png" alt="ロゴ" class="logo">
         <nav class="menu">
@@ -6,13 +7,16 @@
             <button @click="logout" class="menu-item"><img src="/img/logout.png" alt="ログアウト">ログアウト</button>
         </nav>
         <div class="share-box">
-
             <h2>シェア</h2>
+           <ValidationProvider name="投稿" rules="required|max:120" v-slot="{ errors }"> 
             <textarea v-model="message"></textarea>
-            <button class="share-button" @click="share">シェアする</button>
+            <div class="error">{{ errors[0]}}</div>
+            </ValidationProvider>
+            <button :disabled="invalid" class="share-button" @click="() => { share(); reset(); }">シェアする</button>
+             
         </div>
     </aside>
-   
+  </validation-observer>
 </template>
 <script>
 
@@ -45,6 +49,7 @@ export default {
             })
         //    console.log("投稿", this.message)
            this.message =''
+           this.$refs.observer.reset() 
            this.$emit('refreshPosts')
         } catch (err) {
             console.error('投稿失敗:', err)
@@ -122,5 +127,8 @@ textarea {
    font-weight: bold;
    font-size: 1rem;
    margin-left: 180px;
+}
+.error {
+    color: red;
 }
 </style>

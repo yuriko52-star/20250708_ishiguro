@@ -1,5 +1,5 @@
 <template>
-  <div class="index-layout">
+<div class="index-layout">
     <SideNav @refreshPosts="fetchPosts"/>
       <main class="main-content">
       <h2>ホーム</h2>
@@ -26,7 +26,8 @@ export default {
   },
   data() {
     return {
-      posts: []
+      posts: [],
+      
     }
   },
    

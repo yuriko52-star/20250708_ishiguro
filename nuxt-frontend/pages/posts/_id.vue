@@ -1,11 +1,10 @@
 <template>
-    <div class="index-layout">
-        
-        <SideNav @refreshPosts="fetchPost"/>
+	<div class="index-layout">
+        <SideNav />
         <main class="main-content">
             <h2>コメント</h2>
             <Message 
-                v-if="post.username"
+                v-if="post.id"
                 :post="post" :showDetailLink="false"
                 @deleted="handleDeleted"
                 @liked="handleLiked"/>
@@ -13,17 +12,22 @@
                 <div  v-if="post.comments" class="comment-content">
                 <h3>コメント</h3>
                 <div v-for="comment in post.comments" :key="comment.id" class="comment-item">
-                    <p class="username">{{comment.user.username}}</p>
+                    <p class="username">{{comment.username|| '名無しの権瓶'}}</p>
                     <p class="comment-body">{{ comment.comment}}</p>
                 </div>
             </div>
-            <div class="comment-input" v-if="post">
-                <input v-model="newComment" class="input">
+			<validation-observer ref="obs" v-slot="{ invalid , reset}">
+            <div class="comment-input">
+				<validation-provider name="コメント" rules="required|max:120" v-slot="{ errors }">
+                <input v-model="newComment" class="input" >
+				 <div class="error">{{ errors[0] }}</div>
+				 </validation-provider>
             </div>
-            <div class="btn" vi-if="post">
-                <button @click="submitComment" class="comment-btn">コメント</button>
+            <div class="btn">
+                <button :disabled="invalid" @click="() => { submitComment(); reset(); }" class="comment-btn">コメント</button>
+                <p v-if="commentError" class="error">{{ commentError}}</p>
             </div>
-            
+            </validation-observer>
         </main>
     </div>
 </template>
@@ -31,60 +35,78 @@
 <script>
 import SideNav from '~/components/SideNav.vue'
 import Message from '~/components/Message.vue'
-
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 export default {
     components: {
         SideNav,
-        Message
+        Message,
+		ValidationObserver, 
+		ValidationProvider 
     },
     data() {
         return {
             post:{},
             newComment: '',
-            username: '',
-          }
+            commentError: '',
+        }
     },
-    async fetch() {
+     async fetch() {
     await this.fetchPost()
   },
+  
     methods: {
     async fetchPost() {
        const id = this.$route.params.id
       const idToken = localStorage.getItem('idToken')
+	  console.log('fetchPost idToken:', idToken);
       if (!idToken) {
         console.warn('トークンがありません。ログインしてください。')
         return
     }
     try {
-    const res = await this.$axios.get(`http://localhost:8000/api/posts/${id}`,{
-        headers: {
-          Authorization: `Bearer ${idToken}`
-        }
-      })
-      console.log('取得したpost:', res.data)
-      this.post = res.data
-      console.log('post:', this.post)
-      } catch (e) {
-        console.error('コメント投稿画面取得でエラー:', e.response?.status, e.response?.data)
+		//  const id = this.$route.params.id
+      	const res = await this.$axios.get(`http://localhost:8000/api/posts/${id}`, {
+            headers: { Authorization: `Bearer ${idToken}` }
+          })
+		  console.log('fetchPost received post:', res.data);
+      console.log('post.comments length:', res.data.comments.length);
+      console.log('post.comments:', res.data.comments);
+res.data.comments.forEach(c => console.log('comment item:', c));
+          this.post = res.data
+          this.post.comments.forEach(c => console.log('comment item:', c))
+        } catch (e) {
+        console.error('取得エラー', e.response?.status, e.response?.data)
       }
     },
     
     async submitComment() {
-      const idToken = localStorage.getItem('idToken')
+		const isValid = await this.$refs.obs.validate()
+      	if (!isValid) return
+       const idToken = localStorage.getItem('idToken')
+	   console.log('submitComment idToken:', idToken);
+     this.commentError = ''
       try {
-        await this.$axios.post('http://localhost:8000/api/comments', {
+        const res =  await this.$axios.post('http://localhost:8000/api/comments', {
           post_id: this.post.id,
-          username: this.username,
+         
           comment: this.newComment
         }, {
           headers: {
             Authorization: `Bearer ${idToken}`
           }
         })
+		console.log('Comment POST response:', res.data);
+    console.log('post.comments:', this.post.comments);
+
         this.newComment = ''
+		
         await this.fetchPost()
-      } catch  {
-        alert('コメント送信エラー')
+        console.log('updated post.comments:', this.post.comments)
+      } catch (error) {
+         console.error('コメント送信失敗:', error);
+        this.commentError = error.response?.data.message || '自分の投稿にコメントを送信できません'
+      }
+      
       }
     },
     async handleDeleted() {
@@ -94,7 +116,7 @@ export default {
       await this.fetchPost()
     }
   }
-}
+
 </script>
 
 <style scoped>
@@ -143,7 +165,8 @@ h3 {
 }
 .input {
   flex: 1;
-  padding: 0.5rem;
+width: 1500px;
+  padding: 1rem;
   border-radius: 8px;
   border: 1px solid #ccc;
   color: white;
@@ -160,5 +183,8 @@ h3 {
   padding: 0.5rem 1rem;
   font-weight: bold;
   
+}
+.error {
+	color: red;
 }
 </style>

@@ -1,14 +1,24 @@
 <template>
+    <validationObserver v-slot="{ invalid }">
     <div class="register-page">
         <div class="register-box">
             <h2>新規登録</h2>
+            <ValidationProvider name="ユーザーネーム" rules="required|max:20" v-slot="{ errors }">
             <input v-model="username" type="text" placeholder="ユーザーネーム">
+            <div class="error">{{ errors[0]}}</div>
+            </ValidationProvider>
+            <ValidationProvider name="メールアドレス" rules="required|email" v-slot="{ errors }">
             <input v-model="email" type="email" placeholder="メールアドレス">
+            <div class="error">{{ errors[0]}}</div>
+            </ValidationProvider>
+            <ValidationProvider name="パスワード" rules="required|min:6" v-slot="{ errors }">  
             <input v-model="password" type="password" placeholder="パスワード">
-        
-            <button @click="register">新規登録</button>
+            <div class="error">{{ errors[0]}}</div>
+            </ValidationProvider>
+            <button :disabled="invalid" @click="register">新規登録</button>
         </div>
     </div>
+    </validationObserver>
 </template>
 
 <script>
@@ -90,5 +100,8 @@ export default {
    
    display: block;
    margin-left: 120px;
+}
+.error {
+    color: red;
 }
 </style>
