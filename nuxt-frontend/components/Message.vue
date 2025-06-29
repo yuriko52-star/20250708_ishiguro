@@ -65,6 +65,7 @@ export default {
                     Authorization: `Bearer ${idToken}`
                 }
             })
+             console.log('投稿削除成功、deleted イベントを emit します')  
             this.$emit('deleted')
             } catch(err) {
                 this.deleteError = err.response?.data.message || '削除できません';

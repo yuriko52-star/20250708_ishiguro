@@ -3,11 +3,13 @@
         <SideNav />
         <main class="main-content">
             <h2>コメント</h2>
-            <Message 
+             <Message 
                 v-if="post.id"
+                :key="post.id + '-' + post.likes_count" 
                 :post="post" :showDetailLink="false"
                 @deleted="handleDeleted"
-                @liked="handleLiked"/>
+                @liked="handleLiked"/> 
+                
     
                 <div  v-if="post.comments" class="comment-content">
                 <h3>コメント</h3>
@@ -25,7 +27,7 @@
             </div>
             <div class="btn">
                 <button :disabled="invalid" @click="() => { submitComment(); reset(); }" class="comment-btn">コメント</button>
-                <p v-if="commentError" class="error">{{ commentError}}</p>
+                <!-- <p v-if="commentError" class="error">{{ commentError}}</p> -->
             </div>
             </validation-observer>
         </main>
@@ -52,7 +54,7 @@ export default {
     },
      async fetch() {
     await this.fetchPost()
-  },
+  	},
   
     methods: {
     async fetchPost() {
@@ -61,22 +63,26 @@ export default {
 	  console.log('fetchPost idToken:', idToken);
       if (!idToken) {
         console.warn('トークンがありません。ログインしてください。')
-        return
+        return null
     }
     try {
-		//  const id = this.$route.params.id
+		
       	const res = await this.$axios.get(`http://localhost:8000/api/posts/${id}`, {
             headers: { Authorization: `Bearer ${idToken}` }
           })
-		  console.log('fetchPost received post:', res.data);
-      console.log('post.comments length:', res.data.comments.length);
-      console.log('post.comments:', res.data.comments);
-res.data.comments.forEach(c => console.log('comment item:', c));
-          this.post = res.data
-          this.post.comments.forEach(c => console.log('comment item:', c))
+          
+    
+		  	// console.log('fetchPost received post:', res.data);
+    		//    console.log('post.comments length:', res.data.comments.length);
+      		// console.log('post.comments:', res.data.comments);
+      		// res.data.comments.forEach(c => console.log('comment item:', c));
+          this.post = Object.assign({},res.data)
+         return res.data
+          // this.post.comments.forEach(c => console.log(`再代入後 comment[${i}]:`, c))
         } catch (e) {
-        console.error('取得エラー', e.response?.status, e.response?.data)
-      }
+        	console.error('取得エラー', e.response?.status, e.response?.data)
+        	return null
+      	}
     },
     
     async submitComment() {
@@ -96,7 +102,7 @@ res.data.comments.forEach(c => console.log('comment item:', c));
           }
         })
 		console.log('Comment POST response:', res.data);
-    console.log('post.comments:', this.post.comments);
+    	console.log('post.comments:', this.post.comments);
 
         this.newComment = ''
 		
@@ -104,19 +110,22 @@ res.data.comments.forEach(c => console.log('comment item:', c));
         console.log('updated post.comments:', this.post.comments)
       } catch (error) {
          console.error('コメント送信失敗:', error);
-        this.commentError = error.response?.data.message || '自分の投稿にコメントを送信できません'
+        // this.commentError = error.response?.data.message || '自分の投稿にコメントを送信できません'
       }
       
-      }
+    },
+    
+  	async handleLiked() {
+		console.log('処理: likeボタン押された');
+      await this.fetchPost()
+	  console.log('fetchPost 後の post:', this.post);
     },
     async handleDeleted() {
-      await this.fetchPost()
-    },
-    async handleLiked() {
-      await this.fetchPost()
-    }
+          this.post = {}
+          this.$router.push('/')
+  	},
   }
-
+}
 </script>
 
 <style scoped>
