@@ -52,7 +52,7 @@ export default {
                 })
                 console.log('Laravel登録完了')
                 this.$router.push('/login')
-
+                
             } catch (error) {
                 alert('登録エラー: ' + error.message)
             }

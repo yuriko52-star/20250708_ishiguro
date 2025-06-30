@@ -29,7 +29,7 @@ class PostController extends Controller
                     
                     'comments' => $post->comments,
                 ];
-                \Log::info('likes_count:', [$post->likes_count]);
+                // \Log::info('likes_count:', [$post->likes_count]);
             }));
     }
 

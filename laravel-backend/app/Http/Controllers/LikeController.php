@@ -14,11 +14,11 @@ class LikeController extends Controller
         $request->validate([
             'post_id' => 'required|exists:posts,id',
         ]);
-        $userId = auth()->id();
-        $postId = $request->post_id;
-        $post = POst::find($postId);
-        $like = Like::where('post_id', $postId)->where('user_id', $userId)->first();
-        if($post->user_id === $userId) {
+        $user_id = auth()->id();
+        $post_id = $request->post_id;
+        $post = POst::find($post_id);
+        $like = Like::where('post_id', $post_id)->where('user_id', $user_id)->first();
+        if($post->user_id === $user_id) {
             return response()->json(['message'=> '自分の投稿にはいいねできません'], 403);
         }
         if ($like) {
@@ -26,8 +26,8 @@ class LikeController extends Controller
             return response()->json(['liked' => false, 'message' => 'Unliked']);
         } else {
             Like::create([
-                'post_id' => $postId,
-                'user_id' => $userId,
+                'post_id' => $post_id,
+                'user_id' => $user_id,
             ]);
             return response()->json(['liked' => true, 'message' => 'Liked']);
         }

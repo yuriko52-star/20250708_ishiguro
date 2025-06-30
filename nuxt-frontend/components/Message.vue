@@ -23,7 +23,7 @@ export default {
             type: Object,
             required: true
         },
-            showDetailLink: {
+        showDetailLink: {
             type: Boolean,
             default: true
         }

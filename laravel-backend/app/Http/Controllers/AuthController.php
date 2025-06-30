@@ -47,7 +47,7 @@ class AuthController extends Controller
                 'user' => $user
             ]);
         } catch (FailedToVerifyToken $e) {
-            \Log::error('Firebase Token error: ' . $e->getMessage());
+            // \Log::error('Firebase Token error: ' . $e->getMessage());
             return response()->json(['error' => '無効なトークンです'], 401);
         }
     }

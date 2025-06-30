@@ -8,14 +8,14 @@ use App\Models\Comment;
 
 class CommentController extends Controller
 {
-    public function show($postId)
+    public function show($post_id)
     {
         $post = Post::with([
             'post.comments' => fn($q) => $q->latest(),
             'comments.user',
             ])
             ->withCount('likes')
-            ->findOrFail($postId);
+            ->findOrFail($post_id);
 
         return response()->json([
             'id' => $post->id,
