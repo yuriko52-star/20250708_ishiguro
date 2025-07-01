@@ -1,5 +1,6 @@
 # Twitter-app   
-## 画像  
+## 画像  （メインページ）  
+![index.vue](./images/index.vue.png)
   
 ## 作成した目的  
 
@@ -24,10 +25,15 @@
   php  v8.1.2  
     
 ## テーブル設計  
+![テーブル構成](./images/table1.png)  
+![テーブル構成２](./images/table2.png)  
+
   
 ## ER図  
+![ER図] (./laravel-backend/erd3.png) 
 
-## 環境構築  
+## 環境構築  (クローン編)　　
+
 1. クローンしたいところに移動  
 2. git clone git@github.com:yuriko52-star/提出フォルダー名.git  
 3. mv 提出フォルダー名 任意のフォルダー名  
@@ -42,9 +48,13 @@
 ### laravel側  
 11. cd laravel-backend  
 12. composer install  
+    データベースの作成  
+    mysql -u root -p  
+    CREATE DATABASE  twitter_app_clone  
+     
 13. .cp .env.example .env  
 14. .envに環境変数を追加  
-    DB_DATABASE=twitter_app  
+    DB_DATABASE=twitter_app_clone  
     DB_USERNAME=root  
     DB_PASSWORD=root  
 15. php artisan key:generate  
