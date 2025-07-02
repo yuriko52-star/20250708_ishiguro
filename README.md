@@ -8,7 +8,7 @@
 slackのコミュニティで発信し、反応をいただくことに快感を覚えたこともあり、ちょっとしたつぶやきで  
 簡単にコミュニケーションできないかとこのアプリを作成してみました。
 ## アプリケーションURL  
- 新規登録  http://localgost:3000/register  
+ 新規登録  http://localhost:3000/register  
  ログイン  http://localhost:3000/login  
 
 
@@ -55,23 +55,25 @@ slackのコミュニティで発信し、反応をいただくことに快感を
     mysql -u root -p  
     CREATE DATABASE  お好きな名前（小文字で。ハイフンは✖ _なら〇）   
      
-14. .cp .env.example .env  
+14. cp .env.example .env  
 15. .envに環境変数を追加  
-    DB_DATABASE= 13で作成した名前
+    DB_DATABASE= 13で作成した名前  
     DB_USERNAME=root  
     DB_PASSWORD=root  
-15. php artisan key:generate  
-16. php artisan migrate
-17. touch firebase-adminsdk.json   
-18. cd firebase-adminsdk.json  
+16. php artisan key:generate  
+17. php artisan migrate
+18. touch firebase-adminsdk.json   
+ 
 19. ファイルの中身をコピーする  
-20. php artisan serve  
+20. .envに以下を記載  
+    FIREBASE_CREDENTIALS=/absolute/path/to/laravel-backend/firebase-adminsdk.json
+21. php artisan serve  
 
 ### nuxt側  
 21. cd nuxt-frontend  
-22. cd plugins  
-23. touch firebase.js  
-24. cd touch firebase.js  
+22. yarn install  
+23. cd plugins  
+24. touch firebase.js  
 25. ファイルの中身をコピーする  
 26. yarn dev  
 
@@ -83,7 +85,7 @@ slackのコミュニティで発信し、反応をいただくことに快感を
   ご自身で公式サイトに入っていただき設定をお願いします。  
   公式サイトのURL：https://firebase.google.com  
   - Firebaseプロジェクトを新規作成（コンソールから）  
-  - Firebase Authentication・Firestore など必要な機能を有効化 
+  - Firebase Authentication・Firestore など必要な機能を有効化  
   nuxt側の設定  
   - yarn add firebase
   - firebase.jsをnuxt-frontend/pluginsに作成（モジュラー構文で）   
