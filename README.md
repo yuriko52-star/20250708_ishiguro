@@ -1,4 +1,6 @@
-# Twitter-app   
+# Twitter-app  
+## 概要  
+複雑な機能がないので老若男女が楽しめる、ちょっとつぶやいてみたい時に最適なアプリです   
 ## 画像  （メインページ）  
 ![index.vue](./images/index.vue.png)
   
@@ -13,8 +15,8 @@ slackのコミュニティで発信し、反応をいただくことに快感を
 
 
 ## 他のリポジトリ  
-  バックエンド laravel-backend  
-  フロントエンド nuxt-frontend  
+  バックエンド 20250702_ishiguro/laravel-backend  
+  フロントエンド 20250702_ishiguro/nuxt-frontend  
 ## 機能一覧  
 - 新規登録機能  
 - ログイン機能  
@@ -38,8 +40,8 @@ slackのコミュニティで発信し、反応をいただくことに快感を
 ## 環境構築  (クローン編)　　
 
 1. クローンしたいところに移動  
-2. git clone git@github.com:yuriko52-star/提出フォルダー名.git  
-3. mv 提出フォルダー名 任意のフォルダー名  
+2. git clone git@github.com:yuriko52-star/20250702_ishiguro.git  
+3. mv 20250702_ishiguro 任意のフォルダー名  
 4. 任意のフォルダー名の リポジトリ作成  
 5. cd  任意のフォルダー名  
 6. git remote set-url origin git@github.com:yuriko52-star/任意のフォルダー名.git  
@@ -79,7 +81,7 @@ slackのコミュニティで発信し、反応をいただくことに快感を
 
 ## 注意事項  
 1. CREATE DATABASE  お好きな名前（小文字で。ハイフンは✖ _なら〇）  
-  名前はtwitter_appやtwitter_app_clone以外でお願いします  
+  名前はtwitter_appやtwitter_app_cloneやtwitter_app2以外でお願いします  
   (php artisan migrateができなくなるため)  
 2. ユーザー認証はFirebase Authenticationを使用しています。  
   ご自身で公式サイトに入っていただき設定をお願いします。  
