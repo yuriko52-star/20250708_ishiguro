@@ -35,9 +35,9 @@ export default {
         alert('ユーザー情報が取得できません')
         return
         }
-            // if(!this.message.trim()) return
+            
         const idToken = await user.getIdToken()
-            // const idToken = await this.$firebaseAuth.currentUser.getIdToken()
+            
 
             await this.$axios.post('http://localhost:8000/api/posts', {
                  username: user.displayName, 
@@ -47,7 +47,7 @@ export default {
                     Authorization: `Bearer ${idToken}`
                 }
             })
-        //    console.log("投稿", this.message)
+        
            this.message =''
            this.$refs.observer.reset() 
            this.$emit('refreshPosts')
@@ -90,7 +90,7 @@ export default {
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 1.5rem; /* 画像と文字の間のスペース */
+  gap: 1.5rem; 
   color: white;
   text-decoration: none;
   background: none;

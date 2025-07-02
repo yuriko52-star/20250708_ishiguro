@@ -1,31 +1,17 @@
 <template>
     <div>
         <AuthHeader v-if="showHeader"/>
-
-        <!-- <aside v-if="showMainLayout"> -->
-            <!-- <SideNav/> -->
-        <!-- </aside> -->
-        <!-- <main> -->
             <Nuxt/>
-            <!-- <Message v-if="showMainLayout"/> -->
-            
-        <!-- </main> -->
     </div>
-    
 </template>
 
 <script>
 import AuthHeader from '~/components/AuthHeader.vue'
-// import SideNav from '~/components/SideNav.vue'
-// import Message from '~/components/Message.vue'
 import { onAuthStateChanged } from 'firebase/auth'
 
 export default {
     components: {
         AuthHeader,
-        // SideNav,
-        // Message
-
     },
     data() {
         return  {
@@ -37,11 +23,7 @@ export default {
             const route = this.$route.path
             return route === '/login' || route === '/register'
         }
-        /*showMainLayout() {
-            const route = this.$route.path
-            return route === '/' || route.startsWith('/post/')
-        }
-        */
+        
     },
     mounted() {
         onAuthStateChanged(this.$firebaseAuth,(user) => {

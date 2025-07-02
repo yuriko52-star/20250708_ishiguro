@@ -27,7 +27,7 @@
             </div>
             <div class="btn">
                 <button :disabled="invalid" @click="() => { submitComment(); reset(); }" class="comment-btn">コメント</button>
-                <!-- <p v-if="commentError" class="error">{{ commentError}}</p> -->
+                
             </div>
             </validation-observer>
         </main>
@@ -72,13 +72,10 @@ export default {
           })
           
     
-		  	// console.log('fetchPost received post:', res.data);
-    		//    console.log('post.comments length:', res.data.comments.length);
-      		// console.log('post.comments:', res.data.comments);
-      		// res.data.comments.forEach(c => console.log('comment item:', c));
+		  	
           this.post = Object.assign({},res.data)
          return res.data
-          // this.post.comments.forEach(c => console.log(`再代入後 comment[${i}]:`, c))
+         
         } catch (e) {
         	console.error('取得エラー', e.response?.status, e.response?.data)
         	return null
@@ -110,7 +107,7 @@ export default {
         console.log('updated post.comments:', this.post.comments)
       } catch (error) {
          console.error('コメント送信失敗:', error);
-        // this.commentError = error.response?.data.message || '自分の投稿にコメントを送信できません'
+       
       }
       
     },

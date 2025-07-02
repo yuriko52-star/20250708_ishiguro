@@ -96,6 +96,11 @@ slackのコミュニティで発信し、反応をいただくことに快感を
   - php artisan vendor:publish --provider="Kreait\Laravel\Firebase\ServiceProvider" --tag=config で設定ファイル生成  
   - .env に以下を記載  
     FIREBASE_CREDENTIALS=/absolute/path/to/laravel-backend/firebase-adminsdk.json  
+  - config/firebase.phpにも記載  
+     'credentials' => [
+                
+                'file' => '/absolute/path/to/laravel-backend/firebase-adminsdk.json',  
+        ]  
   - 秘密鍵の取得  
      Firebaseコンソール-> プロジェクト設定-> サービスアカウント-> 新しい秘密鍵の生成で取得  
   - ダウンロードしたファイルをfirebase-adminsdk.jsonの名前でlaravel-backendに作成  

@@ -42,9 +42,7 @@ class CommentController extends Controller
            'comment' => 'required|max:120'
         ]);
         $post = Post::findOrFail($request->post_id);
-        // if($post->user_id === auth()->id()) {
-            // return response()->json(['message'=> '自分の投稿にはコメントできません'],403 );
-        // } 
+       
         $comment = Comment::create([
             'post_id' => $request->post_id,
             'user_id' => auth()->id(),
