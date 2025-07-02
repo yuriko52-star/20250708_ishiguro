@@ -96,7 +96,7 @@ slackのコミュニティで発信し、反応をいただくことに快感を
   - php artisan vendor:publish --provider="Kreait\Laravel\Firebase\ServiceProvider" --tag=config で設定ファイル生成  
   - .env に以下を記載  
     FIREBASE_CREDENTIALS=/absolute/path/to/laravel-backend/firebase-adminsdk.json  
-  - config/firebase.phpにも記載  
+  - config/firebase.phpにも記載の修正  
      'credentials' => [
                 
                 'file' => '/absolute/path/to/laravel-backend/firebase-adminsdk.json',  
