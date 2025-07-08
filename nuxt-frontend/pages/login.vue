@@ -60,7 +60,7 @@ export default {
                 this.$router.push("/")
                 console.log('ルーター遷移後') 
                 } catch (error) {
-                console.error('ログイン処理でエラー:', error)
+                console.error('ログイン処理でエラー:', error.code, error.message)
                 alert('ログイン失敗: ' + error.message)
             }
         }

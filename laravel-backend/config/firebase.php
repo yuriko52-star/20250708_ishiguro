@@ -48,7 +48,7 @@ return [
              */
             'credentials' => [
                 
-                'file' => '/home/yuri52/20250708_ishiguro/laravel-backend/firebase-adminsdk.json',
+                'file' => '/home/yuri52/coachtech/20250708_ishiguro/laravel-backend/firebase-adminsdk.json',
                 // 'file' => env('FIREBASE_CREDENTIALS', env('GOOGLE_APPLICATION_CREDENTIALS')),
 
                 /*
