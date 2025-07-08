@@ -15,8 +15,8 @@ slackのコミュニティで発信し、反応をいただくことに快感を
 
 
 ## 他のリポジトリ  
-  バックエンド 20250702_ishiguro/laravel-backend  
-  フロントエンド 20250702_ishiguro/nuxt-frontend  
+  バックエンド 20250708_ishiguro/laravel-backend  
+  フロントエンド 20250708_ishiguro/nuxt-frontend  
 ## 機能一覧  
 - 新規登録機能  
 - ログイン機能  
@@ -42,18 +42,20 @@ slackのコミュニティで発信し、反応をいただくことに快感を
   公式サイトのURL：https://firebase.google.com  
    1. Firebaseプロジェクトを新規作成（Firebase Consoleから）  
    2. 以下の機能を有効化：  
-   - Firebase Authentication  
-   - Cloud Firestore  
+    - Firebase Authentication  
+    - Cloud Firestore  
    3. 秘密鍵（サービスアカウントキー）の取得方法：  
     - Firebase Console → 「プロジェクト設定」→「サービスアカウント」→「新しい秘密鍵の生成」  
     - ダウンロードされたJSONファイルを laravel-backend/firebase-adminsdk.json にリネームして配置  
 
 
-## 環境構築  (クローン編)　　
+## 環境構築  (クローン編)  
+　　
+※提出者向け操作です  
 
 1. クローンしたいところに移動  
-2. git clone git@github.com:yuriko52-star/20250702_ishiguro.git  
-3. mv 20250702_ishiguro 任意のフォルダー名  
+2. git clone git@github.com:yuriko52-star/20250708_ishiguro.git  
+3. mv 20250708_ishiguro 任意のフォルダー名  
 4. 任意のフォルダー名の リポジトリ作成  
 5. cd  任意のフォルダー名  
 6. git remote set-url origin git@github.com:yuriko52-star/任意のフォルダー名.git  
@@ -100,27 +102,41 @@ slackのコミュニティで発信し、反応をいただくことに快感を
 3. yarn add firebase　　
 ####  Firebase プラグインの作成（plugins/firebase.js） 
 4. plugins/firebase.js を作成し、以下のように設定（例）：  
-    import { initializeApp } from 'firebase/app'
+    import { initializeApp } from 'firebase/app'  
+
     import { getAuth } from 'firebase/auth'
 
-    export default (context, inject) => {
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT.firebaseapp.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "",
-        messagingSenderId: "",
-        appId: ""
-      };
-    const app = initializeApp(firebaseConfig)
+    export default (context, inject) => {  
+
+      const firebaseConfig = {  
+
+        apiKey: "YOUR_API_KEY",  
+
+        authDomain: "YOUR_PROJECT.firebaseapp.com",  
+
+        projectId: "YOUR_PROJECT_ID",  
+
+        storageBucket: "",  
+
+        messagingSenderId: "",  
+
+        appId: ""  
+
+      };  
+
+    const app = initializeApp(firebaseConfig)  
+
     const auth = getAuth(app)
 
-    inject('firebaseApp', app)
-    inject('firebaseAuth', auth)
+    inject('firebaseApp', app)  
+
+    inject('firebaseAuth', auth)  
+
   }  
 
  ※　FirebaseのAPIキーなどは Firebase Console から取得してください。  
-6. yarn dev  
+
+5. yarn dev  
 ※　firebase.jsとfirebase-adminsdk.jsonは.gitignoreに追加済みです  
 
     
